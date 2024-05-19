@@ -5,6 +5,7 @@
  */
 package com.stockmanagementsystem;
 
+import static com.stockmanagementsystem.utils.Logging.LOGGER;
 import java.awt.print.PrinterException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
 
-
 /**
  *
  * @author pratap
@@ -32,8 +32,51 @@ public class bill extends javax.swing.JFrame {
      */
     public bill() {
         initComponents();
+        initValues();
+        displayBill();
     }
-    
+
+    private void initValues() {
+        try {
+            this.setLocationRelativeTo(null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "{0}", ex);
+        }
+
+    }
+
+    private void displayBill() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        try {
+
+            Connection con = DBConnect.getConnection();
+            Statement stmt = con.createStatement();
+            String query = "select item_id,item_name,quantity,price,totprice,MAX(biilno),date from bill";
+            ResultSet rs = stmt.executeQuery(query);
+            {
+                while (rs.next()) {
+                    String id = rs.getString("item_id");
+                    String name = rs.getString("item_name");
+                    String qun = rs.getString("quantity");
+                    String price = rs.getString("price");
+
+                    String mfd = rs.getString("totprice");
+
+                    String bill = rs.getString("MAX(biilno)");
+                    String date = rs.getString("date");
+                    jLabel2.setText(bill);
+                    jLabel4.setText(date);
+                    model.addRow(new Object[]{id, name, qun, price, mfd});
+                }
+                //stmt.close();
+                //con.close();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            //e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,14 +99,15 @@ public class bill extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bill");
 
-        jTable1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Item_id", "Item_name", "Quantity", "price", "total_price"
+                "ITEM ID", "ITEM NAME", "QUANTITY", "PRICE", "TOTAL"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -176,91 +220,30 @@ public class bill extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        try {
-            
-            Connection con = DBConnect.getConnection();
-             Statement stmt = con.createStatement();
-            String query = "select item_id,item_name,quantity,price,totprice,MAX(biilno),date from bill";
-        ResultSet rs = stmt.executeQuery(query);
-                {
-            while (rs.next()) {
-                String id = rs.getString("item_id");
-                String name = rs.getString("item_name");
-                String qun = rs.getString("quantity");
-                String price = rs.getString("price");
-                
-                String mfd = rs.getString("totprice");
-                
-                String bill = rs.getString("MAX(biilno)");
-                String date = rs.getString("date");
-                jLabel2.setText(bill);
-                jLabel4.setText(date);
-                model.addRow(new Object[] {id,name,qun,price,mfd});
-            }
-            //stmt.close();
-            //con.close();
+
+        double sum = 0;
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            sum = sum + Double.valueOf(jTable1.getValueAt(i, 4).toString());
         }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            //e.printStackTrace();
-        }  
-         int sum=0;
-     for(int i=0;i<jTable1.getRowCount();i++)
-     {
-    sum=sum+Integer.parseInt(jTable1.getValueAt(i,4).toString());
-     }
-jLabel6.setText(Integer.toString(sum));
-        MessageFormat header =new MessageFormat("Invoice Print");
-         MessageFormat footer =new MessageFormat("Page");
+        jLabel6.setText(Double.toString(sum));
+        MessageFormat header = new MessageFormat("Invoice Print");
+        MessageFormat footer = new MessageFormat("Page");
         try {
             jTable1.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-        
-            
+
         } catch (PrinterException ex) {
             Logger.getLogger(bill.class.getName()).log(Level.SEVERE, null, ex);
         }
-   
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-this.setVisible(false);
-        mainFrame mm=new mainFrame();
+        this.setVisible(false);
+        mainFrame mm = new mainFrame();
         mm.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(bill.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new bill().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
