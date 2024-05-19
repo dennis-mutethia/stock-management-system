@@ -6,7 +6,6 @@
 package com.stockmanagementsystem;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -160,8 +159,7 @@ public class Inventory extends javax.swing.JFrame {
         //String ii=.getText();
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         try {
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock", "root", "");
+            Connection con = DBConnect.getConnection();
 
             Statement stmt = con.createStatement();
             String query = "select * from inventory ";

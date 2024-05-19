@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.stockmanagementsystem;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,9 +23,10 @@ public class addtocart extends javax.swing.JFrame {
      * Creates new form addtocart
      */
     String roll;
+
     public addtocart() {
         initComponents();
-        roll="";
+        roll = "";
     }
 
     /**
@@ -149,180 +151,146 @@ public class addtocart extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        
-        
         DefaultTableModel model = (DefaultTableModel) table2.getModel();
         model.setRowCount(0);
-        int  total = 0;
+        int total = 0;
         String tot = "";
-        
-      //   ProductInformation.categoryChooser = "electronics";
+
+        //   ProductInformation.categoryChooser = "electronics";
         try {
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock", "root", "");
+            Connection con = DBConnect.getConnection();
 
             Statement stmt = con.createStatement();
             String query = "select * from cart ";
-            ResultSet rs=stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(query);
 
-            while(rs.next()) {
+            while (rs.next()) {
                 String id = rs.getString("item_id");
                 String name = rs.getString("item_name");
                 String qun = rs.getString("quantity");
-                 String price1 = rs.getString("price");
-                
+                String price1 = rs.getString("price");
+
                 String mfd = rs.getString("totprice");
-               
-                
-               model.addRow(new Object[] {id,name,qun,price1,mfd});
+
+                model.addRow(new Object[]{id, name, qun, price1, mfd});
             }
             rs.close();
-      
+
             //stmt.close();
             //con.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             //e.printStackTrace();
-        } 
-        int sum=0;
-     for(int i=0;i<table2.getRowCount();i++)
-     {
-    sum=sum+Integer.parseInt(table2.getValueAt(i,4).toString());
-     }
-jLabel2.setText(Integer.toString(sum));
+        }
+        int sum = 0;
+        for (int i = 0; i < table2.getRowCount(); i++) {
+            sum = sum + Integer.parseInt(table2.getValueAt(i, 4).toString());
+        }
+        jLabel2.setText(Integer.toString(sum));
 //String b=jLabel2.getText();
-
 
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-this.setVisible(false);
-        Searchproduct mm=new Searchproduct();
+        this.setVisible(false);
+        Searchproduct mm = new Searchproduct();
         mm.setVisible(true);       // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-       workWithDatabase();
-    
-    
-    
+        workWithDatabase();
 
-try
-{DefaultTableModel model=(DefaultTableModel)table2.getModel();
-           int selectedRowIndex =table2.getSelectedRow();
-          String a=model.getValueAt(selectedRowIndex,0).toString();
-           String b=model.getValueAt(selectedRowIndex,1).toString();
-            String c=model.getValueAt(selectedRowIndex,2).toString();
-             String d=model.getValueAt(selectedRowIndex,3).toString(); 
-             String e=model.getValueAt(selectedRowIndex,4).toString();
-    Class.forName("com.mysql.jdbc.Driver");
-             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/fs","root","");
-             String query = "insert into bill(item_id,item_name,quantity,price,totprice) values('"+a+"','"+b+"','"+c+"','"+d+"','"+e+"')";
-             Statement smt3=con.createStatement();
-         //ResultSet   rs=smt3.executeQueryUpdate(query);
-             
-                       int success=smt3.executeUpdate(query);
-                           if(success==1)
-                            {
-                              JOptionPane.showMessageDialog(this, "Product Successfully Added to bill ");
-                               //emp1.showMessageDialog(this, "Problem in Saving. Retry");
-                            }
-                            else
-                            {
+        try {
+            DefaultTableModel model = (DefaultTableModel) table2.getModel();
+            int selectedRowIndex = table2.getSelectedRow();
+            String a = model.getValueAt(selectedRowIndex, 0).toString();
+            String b = model.getValueAt(selectedRowIndex, 1).toString();
+            String c = model.getValueAt(selectedRowIndex, 2).toString();
+            String d = model.getValueAt(selectedRowIndex, 3).toString();
+            String e = model.getValueAt(selectedRowIndex, 4).toString();
+            Connection con = DBConnect.getConnection();
+            String query = "insert into bill(item_id,item_name,quantity,price,totprice) values('" + a + "','" + b + "','" + c + "','" + d + "','" + e + "')";
+            Statement smt3 = con.createStatement();
+            //ResultSet   rs=smt3.executeQueryUpdate(query);
 
-                                JOptionPane.showMessageDialog(this, "Problem in Saving. Retry");
-                            }
-             
-          
-            
-}
-catch(Exception e)
-        {
+            int success = smt3.executeUpdate(query);
+            if (success == 1) {
+                JOptionPane.showMessageDialog(this, "Product Successfully Added to bill ");
+                //emp1.showMessageDialog(this, "Problem in Saving. Retry");
+            } else {
+
+                JOptionPane.showMessageDialog(this, "Problem in Saving. Retry");
+            }
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-   
-        
-     public void workWithDatabase()
-    {
-        Connection c=null;
-         Statement  s=null;
-         ResultSet rs1=null;
-         int flag=0;
-         try{
-             
-        Class.forName("com.mysql.jdbc.Driver");
-       c=DriverManager.getConnection("jdbc:mysql://localhost/fs","root","");
-       s=c.createStatement();
 
-  DefaultTableModel model = (DefaultTableModel) table2.getModel();   
-           int selectedRowIndex =table2.getSelectedRow();
-          String a=model.getValueAt(selectedRowIndex,0).toString();
-         
-            String c1=model.getValueAt(selectedRowIndex,2).toString();
-            
-   
-              String s1=a;
-        
-   //  rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
-        
-         int id=Integer.parseInt(c1);
-    rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
-    
-       
-   // jLabel6.setText(s1);
-           
-             while(rs1.next()) {
-                  String id1=rs1.getString("quantity");
-                  int id2=Integer.parseInt(id1);
-        
-                 int id3=id2-id;
-               s.executeUpdate("Update inventory set quantity="+id3+" where item_id="+"'"+s1+"'");
-       
-           }
-         /*     while(rs1.next())
+    public void workWithDatabase() {
+        Connection c = DBConnect.getConnection();
+        Statement s = null;
+        ResultSet rs1 = null;
+        int flag = 0;
+        try {
+
+            s = c.createStatement();
+
+            DefaultTableModel model = (DefaultTableModel) table2.getModel();
+            int selectedRowIndex = table2.getSelectedRow();
+            String a = model.getValueAt(selectedRowIndex, 0).toString();
+
+            String c1 = model.getValueAt(selectedRowIndex, 2).toString();
+
+            String s1 = a;
+
+            //  rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
+            int id = Integer.parseInt(c1);
+            rs1 = s.executeQuery("select quantity from  inventory where item_id=" + "'" + s1 + "'");
+
+            // jLabel6.setText(s1);
+            while (rs1.next()) {
+                String id1 = rs1.getString("quantity");
+                int id2 = Integer.parseInt(id1);
+
+                int id3 = id2 - id;
+                s.executeUpdate("Update inventory set quantity=" + id3 + " where item_id=" + "'" + s1 + "'");
+
+            }
+            /*     while(rs1.next())
        {
                String quantity1=rs1.getString("quantity");
                String q3 = quantity1;
                
               
          }*/
-             rs1.close();
-    
-             
-                  
-            
-}
- catch(SQLException | ClassNotFoundException e1)
-         {
-             System.out.println(e1);
-         }
-         try {
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/fs", "root", "");
+            rs1.close();
+
+        } catch (SQLException e1) {
+            System.out.println(e1);
+        }
+        try {
+            Connection con = DBConnect.getConnection();
 
             Statement stmt = con.createStatement();
             String query = "delete from cart ";
-           // ResultSet   rs=smt3.executeQueryUpdate(query);
+            // ResultSet   rs=smt3.executeQueryUpdate(query);
 
-             
             // Statement smt3=con.createStatement();
-         //
-             
-                       int success=stmt.executeUpdate(query);
-            
-      
+            //
+            int success = stmt.executeUpdate(query);
+
             //stmt.close();
             //con.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             //e.printStackTrace();
-        } 
+        }
 //  String b=jLabel2.getText();
-this.setVisible(false);
-        bill mm=new bill();
+        this.setVisible(false);
+        bill mm = new bill();
         mm.setVisible(true);       // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 

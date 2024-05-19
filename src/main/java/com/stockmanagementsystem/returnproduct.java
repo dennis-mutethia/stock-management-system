@@ -270,28 +270,24 @@ public class returnproduct extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-              String ii=bid.getText();
-         DefaultTableModel model = (DefaultTableModel) table.getModel();
-           try {
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock", "root", "");
+        String ii = bid.getText();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        try {
+            Connection con = DBConnect.getConnection();
 
             Statement stmt = con.createStatement();
-             String query = "select * from bill where biilno='"+ii+"' ";
-            ResultSet rs=stmt.executeQuery(query);
+            String query = "select * from bill where biilno='" + ii + "' ";
+            ResultSet rs = stmt.executeQuery(query);
 
-            while(rs.next()) {
+            while (rs.next()) {
                 String id = rs.getString("item_id");
                 String name = rs.getString("item_name");
                 String qun = rs.getString("quantity");
-                 String price = rs.getString("price");
-                
-                String mfd = rs.getString("totprice");
-               
-                
-                
+                String price = rs.getString("price");
 
-               model.addRow(new Object[] {id,name,qun,price,mfd});
+                String mfd = rs.getString("totprice");
+
+                model.addRow(new Object[]{id, name, qun, price, mfd});
             }
             rs.close();
             //stmt.close();
@@ -304,19 +300,18 @@ public class returnproduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-       this.setVisible(false);
-        mainFrame mm=new mainFrame();
-        mm.setVisible(true);  
+        this.setVisible(false);
+        mainFrame mm = new mainFrame();
+        mm.setVisible(true);
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- jTextField1.setText("");
- jTextField2.setText("");
- jTextField3.setText("");
- jTextField4.setText("");
- jTextField5.setText("");
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
 
- 
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -325,34 +320,34 @@ public class returnproduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-           DefaultTableModel model=(DefaultTableModel)table.getModel();
-           int selectedRowIndex =table.getSelectedRow();
-           jTextField1.setText(model.getValueAt(selectedRowIndex,0).toString());
-          jTextField2.setText(model.getValueAt(selectedRowIndex,1).toString());
-          jTextField3.setText(model.getValueAt(selectedRowIndex,2).toString());
-        
-           jTextField4.setText(model.getValueAt(selectedRowIndex,3).toString());
-           jTextField5.setText(model.getValueAt(selectedRowIndex,4).toString());
-                   
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        int selectedRowIndex = table.getSelectedRow();
+        jTextField1.setText(model.getValueAt(selectedRowIndex, 0).toString());
+        jTextField2.setText(model.getValueAt(selectedRowIndex, 1).toString());
+        jTextField3.setText(model.getValueAt(selectedRowIndex, 2).toString());
+
+        jTextField4.setText(model.getValueAt(selectedRowIndex, 3).toString());
+        jTextField5.setText(model.getValueAt(selectedRowIndex, 4).toString());
+
 
     }//GEN-LAST:event_tableMouseClicked
 
     private void jTextField3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField3MouseEntered
-     
-        
+
+
     }//GEN-LAST:event_jTextField3MouseEntered
 
     private void jTextField3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField3MouseClicked
-           // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3MouseClicked
 
     private void jTextField3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField3MouseExited
-       String qun= jTextField3.getText();
-      String pri=jTextField4.getText();
-      int N3=Integer.parseInt(pri);
-      int N1=Integer.parseInt(qun);
-        int N2=N1;
-        int N4=N1*N3;
+        String qun = jTextField3.getText();
+        String pri = jTextField4.getText();
+        int N3 = Integer.parseInt(pri);
+        int N1 = Integer.parseInt(qun);
+        int N2 = N1;
+        int N4 = N1 * N3;
         jTextField5.setText(String.valueOf(N4));  // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3MouseExited
 
@@ -361,63 +356,51 @@ public class returnproduct extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       workWithDatabase();
-}
-          public void workWithDatabase()
-    {
-        Connection c=null;
-         Statement  s=null;
-         ResultSet rs1=null;
-         int flag=0;
-         try{
-             
-        Class.forName("com.mysql.jdbc.Driver");
-       c=DriverManager.getConnection("jdbc:mysql://localhost/java_stock","root","");
-       s=c.createStatement();
+        workWithDatabase();
+    }
 
-  DefaultTableModel model = (DefaultTableModel) table.getModel();   
-           int selectedRowIndex =table.getSelectedRow();
-          String a=model.getValueAt(selectedRowIndex,0).toString();
-         
-            String c1=jTextField3.getText();
-            
-   
-              String s1=a;
-        
-   //  rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
-        
-         int id=Integer.parseInt(c1);
-    rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
-    
-       
-   // jLabel6.setText(s1);
-           
-             while(rs1.next()) {
-                  String id1=rs1.getString("quantity");
-                  int id2=Integer.parseInt(id1);
-        
-                 int id3=id2+id;
-               s.executeUpdate("Update inventory set quantity="+id3+" where item_id="+"'"+s1+"'");
-       
-           }
-         /*     while(rs1.next())
+    public void workWithDatabase() {
+        Connection c = DBConnect.getConnection();
+        Statement s = null;
+        ResultSet rs1 = null;
+        int flag = 0;
+        try {
+
+            s = c.createStatement();
+
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            int selectedRowIndex = table.getSelectedRow();
+            String a = model.getValueAt(selectedRowIndex, 0).toString();
+
+            String c1 = jTextField3.getText();
+
+            String s1 = a;
+
+            //  rs1 = s.executeQuery ("select quantity from  inventory where item_id="+"'"+s1+"'");
+            int id = Integer.parseInt(c1);
+            rs1 = s.executeQuery("select quantity from  inventory where item_id=" + "'" + s1 + "'");
+
+            // jLabel6.setText(s1);
+            while (rs1.next()) {
+                String id1 = rs1.getString("quantity");
+                int id2 = Integer.parseInt(id1);
+
+                int id3 = id2 + id;
+                s.executeUpdate("Update inventory set quantity=" + id3 + " where item_id=" + "'" + s1 + "'");
+
+            }
+            /*     while(rs1.next())
        {
                String quantity1=rs1.getString("quantity");
                String q3 = quantity1;
                
               
          }*/
-             rs1.close();
-             
-    
-             
-                  
-            
-}
- catch(SQLException | ClassNotFoundException e1)
-         {
-             System.out.println(e1);
-         }
+            rs1.close();
+
+        } catch (SQLException e1) {
+            System.out.println(e1);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

@@ -179,8 +179,7 @@ public class bill extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         try {
             
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock", "root", "");
+            Connection con = DBConnect.getConnection();
              Statement stmt = con.createStatement();
             String query = "select item_id,item_name,quantity,price,totprice,MAX(biilno),date from bill";
         ResultSet rs = stmt.executeQuery(query);
@@ -202,7 +201,7 @@ public class bill extends javax.swing.JFrame {
             //stmt.close();
             //con.close();
         }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
             //e.printStackTrace();
         }  

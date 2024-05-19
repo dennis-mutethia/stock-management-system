@@ -7,38 +7,42 @@ package com.stockmanagementsystem;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author vinayak
  */
 public class DBConnect {
-    static Connection ConnectDb() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    private static Connection con = null;
+
+    public static Connection getConnection() {
+        try {
+            if(con ==null || !con.isValid(1) || con.isClosed())
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    con = DriverManager.getConnection(
+                            "jdbc:mysql://"
+                                    + Init.APPLICATION_PROPERTIES.getProperty("db_host") + ":"
+                                    + Init.APPLICATION_PROPERTIES.getProperty("db_port") + "/"
+                                    + Init.APPLICATION_PROPERTIES.getProperty("db_name"),
+                            Init.APPLICATION_PROPERTIES.getProperty("db_user"),
+                            Init.APPLICATION_PROPERTIES.getProperty("db_user_password")
+                    );
+                    
+                } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println("Error" + e);
+                }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnect.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return con;
     }
-    private Connection con;
-    private Statement st;
-    private ResultSet rs;
-   
-    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
-    public DBConnect(){
-    try{
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          con = DriverManager.getConnection(
-                    "jdbc:mysql://"
-                            + Init.APPLICATION_PROPERTIES.getProperty("db_host")+":"
-                            + Init.APPLICATION_PROPERTIES.getProperty("db_port")+"/" 
-                            + Init.APPLICATION_PROPERTIES.getProperty("db_name"),
-                    Init.APPLICATION_PROPERTIES.getProperty("db_user"),
-                    Init.APPLICATION_PROPERTIES.getProperty("db_user_password")
-          );
-                  
-          //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock","root","");
-          st = con.createStatement();
     
-    }catch(Exception e){System.out.println("Error"+e);}
     
-    } 
+
 }

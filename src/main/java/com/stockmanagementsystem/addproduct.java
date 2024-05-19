@@ -206,8 +206,7 @@ public class addproduct extends javax.swing.JFrame {
         String batchno = TextBox7.getText();
     
         try{
-             Class.forName("com.mysql.jdbc.Driver");
-             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock","root","");
+             Connection con = DBConnect.getConnection();
              String query = "insert into inventory(item_id,item_name,quantity,price,mfd,exp,batchno) values('"+item_id+"','"+item_name+"','"+quantity+"','"+price+"','"+mfd+"','"+exp+"','"+batchno+"')";
              Statement smt3=con.createStatement();
          //ResultSet   rs=smt3.executeQueryUpdate(query);

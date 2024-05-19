@@ -152,8 +152,7 @@ public class Track extends javax.swing.JFrame {
               String ii=bid.getText();
          DefaultTableModel model = (DefaultTableModel) table.getModel();
            try {
-            Class.forName("java.sql.DriverManager");
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/java_stock", "root", "");
+            Connection con = DBConnect.getConnection();
 
             Statement stmt = con.createStatement();
              String query = "select * from bill where date='"+ii+"' ";
