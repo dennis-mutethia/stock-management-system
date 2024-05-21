@@ -52,7 +52,7 @@ public class bill extends javax.swing.JFrame {
 
             Connection con = DBConnect.getConnection();
             Statement stmt = con.createStatement();
-            String query = "select item_id,item_name,quantity,price,totprice,MAX(biilno),date from bill";
+            String query = "select item_id,item_name,quantity,price,totprice,MAX(biilno),date from bill group by item_id,item_name,quantity,price,totprice, date";
             ResultSet rs = stmt.executeQuery(query);
             {
                 while (rs.next()) {
